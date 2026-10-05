@@ -20,7 +20,10 @@ const TOKEN_REFRESH_MARGIN_MS = 10_000;
 const WORKLET_URL = "js/pcm-worklet.js";
 const LISTEN_URL = "wss://api.deepgram.com/v2/listen?model=flux-general-en&encoding=linear16&sample_rate=16000";
 const SPEAK_SAMPLE_RATE = 24000;
-const SPEAK_URL = `wss://api.deepgram.com/v2/speak?model=flux-haley-en&encoding=linear16&sample_rate=${SPEAK_SAMPLE_RATE}`;
+// Delivery register for Flux TTS (beta): an integer from -2 (calm) to 2 (animated), default 0.
+// It's a connection parameter, so it applies to the whole session.
+const SPEAK_EXPRESSIVITY = 1;
+const SPEAK_URL = `wss://api.deepgram.com/v2/speak?model=flux-haley-en&encoding=linear16&sample_rate=${SPEAK_SAMPLE_RATE}&expressivity=${SPEAK_EXPRESSIVITY}`;
 const SPEAK_SPEED = 1;
 
 // Flux TTS closes a session after 60 s without a client message. Browsers can't send WebSocket

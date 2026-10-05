@@ -6,13 +6,14 @@
 @inject IConfiguration Configuration
 @implements IDisposable
 
-<PageTitle>Voice Chat</PageTitle>
+<PageTitle>Real-time Voice Chat</PageTitle>
 
 <div class="scenario">
     <div class="scenario__intro">
-        <h1>Voice chat</h1>
+        <h1>Real-time voice chat</h1>
         <p>
-            The agentic chat scenario, now with a voice. Click the microphone to start a voice
+            Agentic chat with a voice, backed by a <code>/voice_chat</code> agent whose instructions
+            ask for short, spoken-style replies. Click the microphone to start a voice
             session: the browser streams audio to Deepgram <strong>Flux</strong>, whose end-of-turn
             detection decides when you've finished speaking and sends the transcript through
             <code>AgentContext.SendMessageAsync</code>. A delegating chat client streams the reply's
@@ -75,7 +76,7 @@
         // The speech tap sits inside FormattedChatClient so it reads the raw streamed text, not the
         // RichTextContent snapshots that the formatter adds for rendering.
         _speechTap = new SpeechTapChatClient(
-            Agents.CreateChatClient("/agentic_chat"),
+            Agents.CreateChatClient("/voice_chat"),
             LoggerFactory.CreateLogger<SpeechTapChatClient>());
         _chatClient = new FormattedChatClient(_speechTap);
         _agent = new UIAgent(_chatClient);
