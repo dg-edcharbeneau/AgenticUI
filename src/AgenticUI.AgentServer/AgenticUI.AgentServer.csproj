@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net11.0</TargetFramework>
@@ -8,7 +8,6 @@
          evaluation-only. Everything else this project uses - including the tool-approval APIs and
          ChatOptions.Reasoning - is now stable, so no MEAI001 suppression is needed. -->
     <NoWarn>$(NoWarn);OPENAI001</NoWarn>
-    <UserSecretsId>45f5e2b3-6ac5-4f68-9285-146c9f161d42</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
