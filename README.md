@@ -27,6 +27,12 @@ This sample demonstrates how to build rich agentic user experiences with .NET. A
 - **Voice** — the real-time voice chat scenario layers Deepgram around the unchanged AG-UI pipeline. The browser streams microphone audio straight to Deepgram Flux (`wss://api.deepgram.com/v2/listen`), and Flux's end-of-turn detection triggers `AgentContext.SendMessageAsync` with the transcript. A `SpeechTapChatClient` inside `FormattedChatClient` splits the streamed reply into sentences, and the browser streams them to Deepgram Flux TTS (`wss://api.deepgram.com/v2/speak`) as one turn per reply. Both sockets authenticate with short-lived JWTs from the web app's `/api/deepgram/token` endpoint, so the API key never reaches the browser and no audio crosses the Blazor circuit. The voice UI follows the [Deepgram voice UI best practices](https://github.com/dg-edcharbeneau/voice-best-practices): an explicit, always-visible state machine, a mic meter, barge-in that reports what the user actually heard back into the agent's history, and one TTS socket per voice session.
 - **`AgenticUI.AppHost` / `AgenticUI.ServiceDefaults`** — Aspire orchestration and service discovery.
 
+### Real-time voice
+
+![Real-time voice architecture: the browser streams audio to Deepgram Flux speech-to-text and plays Flux TTS audio, the Blazor web app mints Deepgram tokens and talks to the agent server over AG-UI, and the agent server runs on Microsoft Foundry](docs/images/deepgram-voice-architecture.svg)
+
+The browser owns both Deepgram WebSockets, so audio never crosses the Blazor circuit. The web app only mints short-lived tokens and moves text: the finished transcript goes to the `/voice_chat` agent over AG-UI, and the reply's sentences come back to the browser for Flux TTS.
+
 ### Packages used
 
 - `Microsoft.Agents.AI`, `Microsoft.Agents.AI.OpenAI` (1.15.0)
