@@ -145,6 +145,12 @@ body { color: var(--app-text); }
 .scenario__split .sc-ai-message-list { padding: 1rem; }
 .scenario__split .sc-ai-chat-page__footer { padding: .75rem; }
 
+/* The textarea's intrinsic width (its default cols) sets the input body's flex minimum, so
+   leading actions such as the voice controls push the send button out of the input. Let the
+   body and textarea shrink to the room that's left instead. */
+.sc-ai-input__body { min-width: 0; }
+.sc-ai-input__textarea { width: 100%; min-width: 0; }
+
 /* Native list markers can be misplaced inside the component's pre-wrapped streaming
    content. Draw unordered markers explicitly so they remain aligned at every width. */
 ul.sc-ai-rich-text__list { list-style: none; padding-inline-start: 1.5rem; }
