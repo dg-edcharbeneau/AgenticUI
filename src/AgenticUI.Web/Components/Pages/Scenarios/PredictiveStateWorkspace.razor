@@ -40,7 +40,11 @@
                                  SuggestionSelected="SendSuggestionAsync" />
             <div class="sc-ai-chat-page__footer">
                 <div class="sc-ai-chat-page__input-container">
-                    <MessageInput Placeholder="Describe an edit..." />
+                    <MessageInput Placeholder="Describe an edit...">
+                        <LeadingActions>
+                            <VoiceControls SpeechTap="SpeechTap" />
+                        </LeadingActions>
+                    </MessageInput>
                 </div>
             </div>
         </div>
@@ -61,6 +65,10 @@
 
     [Parameter, EditorRequired]
     public EventCallback ResetRequested { get; set; }
+
+    /// <summary>The chat client tap that feeds the agent's replies to text-to-speech.</summary>
+    [Parameter, EditorRequired]
+    public SpeechTapChatClient SpeechTap { get; set; } = default!;
 
     private bool IsRunning => IsRunningStatus(AgentContext.Status);
 

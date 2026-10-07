@@ -1,5 +1,6 @@
 @page "/reasoning"
 @inject AgentServerConnection Agents
+@inject ILoggerFactory LoggerFactory
 @implements IDisposable
 
 <PageTitle>Reasoning</PageTitle>
@@ -32,6 +33,9 @@
                     </details>
                 </BlockRenderer>
             </MessageListContent>
+            <InputLeadingActions>
+                <VoiceControls SpeechTap="_speechTap" />
+            </InputLeadingActions>
         </ChatPage>
     </div>
 </div>
@@ -39,10 +43,14 @@
 @code {
     private UIAgent _agent = default!;
     private IChatClient _chatClient = default!;
+    private SpeechTapChatClient _speechTap = default!;
 
     protected override void OnInitialized()
     {
-        _chatClient = Agents.CreateChatClient("/reasoning");
+        _speechTap = new SpeechTapChatClient(
+            Agents.CreateChatClient("/reasoning"),
+            LoggerFactory.CreateLogger<SpeechTapChatClient>());
+        _chatClient = _speechTap;
         _agent = new UIAgent(
             _chatClient,
             options => options.AddBlockHandler(new ReasoningActivityHandler()));

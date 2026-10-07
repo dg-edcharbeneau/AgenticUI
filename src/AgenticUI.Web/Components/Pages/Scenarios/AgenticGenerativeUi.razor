@@ -1,5 +1,6 @@
 @page "/agentic-generative-ui"
 @inject AgentServerConnection Agents
+@inject ILoggerFactory LoggerFactory
 @implements IDisposable
 @using System.Text.Json
 
@@ -39,7 +40,11 @@
             </div>
         </aside>
         <div class="scenario__chat">
-            <ChatPage Agent="_agent" Placeholder="Ask me to plan something…" />
+            <ChatPage Agent="_agent" Placeholder="Ask me to plan something…">
+                <InputLeadingActions>
+                    <VoiceControls SpeechTap="_speechTap" />
+                </InputLeadingActions>
+            </ChatPage>
         </div>
     </div>
 </div>
@@ -47,11 +52,15 @@
 @code {
     private UIAgent<PlanState> _agent = default!;
     private IChatClient _chatClient = default!;
+    private SpeechTapChatClient _speechTap = default!;
     private IDisposable? _stateChangedSubscription;
 
     protected override void OnInitialized()
     {
-        _chatClient = Agents.CreateChatClient("/agentic_generative_ui");
+        _speechTap = new SpeechTapChatClient(
+            Agents.CreateChatClient("/agentic_generative_ui"),
+            LoggerFactory.CreateLogger<SpeechTapChatClient>());
+        _chatClient = _speechTap;
         _agent = new UIAgent<PlanState>(_chatClient, options =>
         {
             options.StateMapper = ctx =>

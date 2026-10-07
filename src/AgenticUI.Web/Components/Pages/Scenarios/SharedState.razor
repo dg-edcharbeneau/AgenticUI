@@ -1,5 +1,6 @@
 @page "/shared-state"
 @inject AgentServerConnection Agents
+@inject ILoggerFactory LoggerFactory
 @implements IDisposable
 @using System.Text.Json
 
@@ -22,7 +23,11 @@
                           RecipeChanged="HandleRecipeChanged" />
         </aside>
         <div class="scenario__chat">
-            <ChatPage Agent="_agent" Placeholder="Ask for a recipe…" />
+            <ChatPage Agent="_agent" Placeholder="Ask for a recipe…">
+                <InputLeadingActions>
+                    <VoiceControls SpeechTap="_speechTap" />
+                </InputLeadingActions>
+            </ChatPage>
         </div>
     </div>
 </div>
@@ -32,12 +37,16 @@
 
     private UIAgent<RecipeState> _agent = default!;
     private IChatClient _chatClient = default!;
+    private SpeechTapChatClient _speechTap = default!;
     private IDisposable? _stateChangedSubscription;
 
     protected override void OnInitialized()
     {
         var threadId = Guid.NewGuid().ToString("N");
-        _chatClient = Agents.CreateChatClient("/shared_state");
+        _speechTap = new SpeechTapChatClient(
+            Agents.CreateChatClient("/shared_state"),
+            LoggerFactory.CreateLogger<SpeechTapChatClient>());
+        _chatClient = _speechTap;
         _agent = new UIAgent<RecipeState>(_chatClient, options =>
         {
             options.ChatOptions = new ChatOptions

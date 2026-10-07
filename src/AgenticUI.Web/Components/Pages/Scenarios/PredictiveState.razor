@@ -16,7 +16,7 @@
     </div>
 
     <AgentBoundary Agent="_agent">
-        <PredictiveStateWorkspace Agent="_agent" ResetRequested="Reset" />
+        <PredictiveStateWorkspace Agent="_agent" SpeechTap="_speechTap" ResetRequested="Reset" />
     </AgentBoundary>
 </div>
 
@@ -26,10 +26,14 @@
 
     private UIAgent<DocumentState> _agent = default!;
     private IChatClient _chatClient = default!;
+    private SpeechTapChatClient _speechTap = default!;
 
     protected override void OnInitialized()
     {
-        _chatClient = Agents.CreateChatClient("/predictive_state");
+        _speechTap = new SpeechTapChatClient(
+            Agents.CreateChatClient("/predictive_state"),
+            LoggerFactory.CreateLogger<SpeechTapChatClient>());
+        _chatClient = _speechTap;
         Reset();
     }
 

@@ -1,6 +1,7 @@
 @page "/agentic-chat"
 @using AgenticUI.Web.Formatting
 @inject AgentServerConnection Agents
+@inject ILoggerFactory LoggerFactory
 @implements IDisposable
 
 <PageTitle>Agentic Chat</PageTitle>
@@ -19,17 +20,25 @@
     </div>
 
     <div class="scenario__chat">
-        <ChatPage Agent="_agent" Placeholder="Ask me anything…" />
+        <ChatPage Agent="_agent" Placeholder="Ask me anything…">
+            <InputLeadingActions>
+                <VoiceControls SpeechTap="_speechTap" />
+            </InputLeadingActions>
+        </ChatPage>
     </div>
 </div>
 
 @code {
     private UIAgent _agent = default!;
     private IChatClient _chatClient = default!;
+    private SpeechTapChatClient _speechTap = default!;
 
     protected override void OnInitialized()
     {
-        _chatClient = new FormattedChatClient(Agents.CreateChatClient("/agentic_chat"));
+        _speechTap = new SpeechTapChatClient(
+            Agents.CreateChatClient("/agentic_chat"),
+            LoggerFactory.CreateLogger<SpeechTapChatClient>());
+        _chatClient = new FormattedChatClient(_speechTap);
         _agent = new UIAgent(_chatClient);
     }
 

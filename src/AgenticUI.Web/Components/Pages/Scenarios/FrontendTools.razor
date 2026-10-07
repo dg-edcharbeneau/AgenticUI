@@ -1,5 +1,6 @@
 @page "/frontend-tools"
 @inject AgentServerConnection Agents
+@inject ILoggerFactory LoggerFactory
 @implements IDisposable
 
 <PageTitle>Frontend tools</PageTitle>
@@ -40,6 +41,9 @@
                         </div>
                     </BlockRenderer>
                 </MessageListContent>
+                <InputLeadingActions>
+                    <VoiceControls SpeechTap="_speechTap" />
+                </InputLeadingActions>
             </ChatPage>
         </div>
     </div>
@@ -48,11 +52,15 @@
 @code {
     private UIAgent _agent = default!;
     private IChatClient _chatClient = default!;
+    private SpeechTapChatClient _speechTap = default!;
     private string _accent = "#512bd4";
 
     protected override void OnInitialized()
     {
-        _chatClient = Agents.CreateChatClient("/tool_based_generative_ui");
+        _speechTap = new SpeechTapChatClient(
+            Agents.CreateChatClient("/tool_based_generative_ui"),
+            LoggerFactory.CreateLogger<SpeechTapChatClient>());
+        _chatClient = _speechTap;
 
         var setAccentColor = AIFunctionFactory.Create(
             async (string color) =>
