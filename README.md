@@ -50,7 +50,7 @@ The browser owns both Deepgram WebSockets, so audio never crosses the Blazor cir
 - [Aspire CLI](https://learn.microsoft.com/dotnet/aspire/)
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)
 - A **[Microsoft Foundry](https://learn.microsoft.com/azure/ai-foundry/) resource** with a
-  `gpt-5-mini` deployment (used for both the general chat and reasoning scenarios).
+  `gpt-5.4-mini` deployment (used for both the general chat and reasoning scenarios).
 - Optional: a [Deepgram API key](https://console.deepgram.com/signup) for the real-time voice chat scenario.
 
 ### Clone and build
@@ -80,7 +80,7 @@ dotnet user-secrets set "Parameters:foundry-endpoint" "https://<resource>.servic
 
 Use the Foundry resource endpoint, such as `https://<resource>.services.ai.azure.com/`. The AppHost models Foundry as an externally managed HTTPS dependency, so it won't provision or modify the Foundry account. The app authenticates with Microsoft Entra ID through `DefaultAzureCredential`; a deployed AgentServer's managed identity needs the same role as the local developer.
 
-Both deployment names default to `gpt-5-mini`. Override them when your deployment names differ:
+Both deployment names default to `gpt-5.4-mini`. Override them when your deployment names differ:
 
 ```bash
 dotnet user-secrets set "Parameters:foundry-model" "<deployment-name>" --project src/AgenticUI.AppHost

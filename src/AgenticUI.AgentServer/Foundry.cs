@@ -12,16 +12,16 @@ namespace AgenticUI.AgentServer;
 /// </summary>
 public sealed class FoundryOptions
 {
-    public const string DefaultModel = "gpt-5-mini";
-    public const string DefaultReasoningModel = "gpt-5-mini";
+    public const string DefaultModel = "gpt-5.4-mini";
+    public const string DefaultReasoningModel = "gpt-5.4-mini";
 
     /// <summary>The Foundry resource endpoint.</summary>
     public string? Endpoint { get; set; }
 
-    /// <summary>The deployment name used by most scenarios, e.g. <c>gpt-5-mini</c>.</summary>
+    /// <summary>The deployment name used by most scenarios, e.g. <c>gpt-5.4-mini</c>.</summary>
     public string Model { get; set; } = DefaultModel;
 
-    /// <summary>A reasoning-capable deployment used by the reasoning scenario, e.g. <c>gpt-5-mini</c>.</summary>
+    /// <summary>A reasoning-capable deployment used by the reasoning scenario, e.g. <c>gpt-5.4-mini</c>.</summary>
     public string ReasoningModel { get; set; } = DefaultReasoningModel;
 }
 

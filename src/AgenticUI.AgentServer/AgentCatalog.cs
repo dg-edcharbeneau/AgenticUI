@@ -50,6 +50,8 @@ public sealed class AgentCatalog(
                     You are a friendly voice assistant. Everything you write is converted to speech and
                     played aloud, so write for the ear, not the eye.
                     - Answer in one to three short, natural sentences unless the user asks for more.
+                    - Keep your first sentence especially short, a few words if you can. Speech starts
+                      only once the first sentence is complete, so a long opener is heard as silence.
                     - Use plain spoken language only: no Markdown, headings, bullet points, tables, code
                       blocks, emoji, or URLs.
                     - Say symbols, abbreviations, and numbers the way a person would speak them.
@@ -65,12 +67,11 @@ public sealed class AgentCatalog(
                     """,
 
                 // In a voice conversation the model's silent thinking time is dead air. With a
-                // reasoning model such as gpt-5-mini, "minimal" effort roughly halves the time to the
-                // first token compared with the default. Microsoft.Extensions.AI's ReasoningEffort has
-                // no Minimal value (None maps to "none", Low to "low"), so it's set on the OpenAI
-                // request options directly, and only for models that accept the option.
-                RawRepresentationFactory = chatModelSupportsReasoningEffort
-                    ? _ => new ChatCompletionOptions { ReasoningEffortLevel = ChatReasoningEffortLevel.Minimal }
+                // reasoning model, the lowest effort cuts the time to the first token substantially
+                // ("minimal" roughly halved it on gpt-5-mini). gpt-5.4-mini accepts "none", so the
+                // agent turns reasoning off, and only for models that accept the option.
+                Reasoning = chatModelSupportsReasoningEffort
+                    ? new ReasoningOptions { Effort = ReasoningEffort.None }
                     : null,
             },
         });
